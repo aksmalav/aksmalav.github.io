@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Play my career | Akshay Malavade</title>
+<meta name="description" content="A short pixel-art walk through Akshay Malavade's career, from Central Jersey to Columbia Business School.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Schibsted+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #E7ECEE; --ink: #18202B; --muted: #5B6470; --accent: #1F5C4E;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0F1418; --ink: #E8ECEE; --muted: #9AA4AE; --accent: #7FC3AE; }
+}
+:root[data-theme="dark"] { --bg: #0F1418; --ink: #E8ECEE; --muted: #9AA4AE; --accent: #7FC3AE; }
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif; }
+a { color: var(--accent); }
+.page { max-width: 900px; margin: 0 auto; padding: 20px 14px 32px; }
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; margin-bottom: 10px; }
+.top .name { font-weight: 600; }
+.top a { font-weight: 600; text-underline-offset: 3px; }
+
+.frame { position: relative; background: #18202B; border-radius: 10px; padding: 8px; box-shadow: 0 6px 0 #0b1015; }
+.hud { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: #E8ECEE; font-family: "Silkscreen", monospace; font-size: 13px; padding: 2px 4px 8px; flex-wrap: wrap; }
+.slots { display: flex; gap: 4px; align-items: center; }
+.slot { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; background: #2A333C; font-size: 16px; filter: grayscale(1); opacity: .35; transition: opacity .3s, background .3s; }
+.slot.got { filter: none; opacity: 1; background: #2F4A43; }
+.slot.bonus { width: 24px; height: 24px; font-size: 13px; }
+.sep { width: 1px; height: 20px; background: #3A444E; margin: 0 4px; }
+.hud a { color: #BFE3D6; font-size: 12px; }
+canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; border-radius: 4px; background: #8CC66F; }
+
+.dialog { position: absolute; left: 18px; right: 18px; bottom: 18px; background: #FFFDF8; color: #18202B; border: 3px solid #18202B; border-radius: 8px; padding: 12px 16px 16px; box-shadow: 0 4px 0 #18202B; display: none; cursor: pointer; }
+.dialog .who { font-family: "Silkscreen", monospace; font-size: 13px; color: #1F5C4E; margin-bottom: 4px; }
+.dialog p { margin: 0; font-size: 16px; line-height: 1.45; max-width: 70ch; }
+.dialog .next { position: absolute; right: 12px; bottom: 6px; font-size: 11px; color: #5B6470; }
+@media (prefers-reduced-motion: no-preference) { .dialog .next { animation: blink 1s steps(2) infinite; } }
+@keyframes blink { 50% { opacity: 0; } }
+@media (max-width: 600px) {
+  .dialog { position: static; margin-top: 8px; box-shadow: none; }
+  .dialog p { font-size: 15px; }
+}
+
+.overlay { position: absolute; inset: 8px; border-radius: 6px; background: rgba(24, 32, 43, .94); color: #F3F5F6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; gap: 14px; overflow: auto; }
+.overlay[hidden] { display: none; }
+.overlay .who-line { margin: 0; color: #BFE3D6; font-weight: 600; }
+.overlay h1 { font-family: "Silkscreen", monospace; font-weight: 400; font-size: clamp(24px, 5vw, 44px); line-height: 1.1; margin: 0; }
+.overlay .sub { margin: 0; max-width: 46ch; line-height: 1.5; color: #D5DBDF; }
+.overlay .small { margin: 0; font-size: 14px; color: #AEB7BF; }
+.overlay a { color: #BFE3D6; }
+.btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.btn { font-family: "Silkscreen", monospace; font-size: 15px; padding: 11px 18px; border-radius: 6px; border: 3px solid #F3F5F6; background: #1F5C4E; color: #fff !important; cursor: pointer; text-decoration: none; box-shadow: 0 4px 0 #0B2A23; }
+.btn.alt { background: transparent; box-shadow: 0 4px 0 #0b1015; }
+.btn:focus-visible, .linkbtn:focus-visible, .ctrl:focus-visible { outline: 3px solid #F2C14E; outline-offset: 3px; }
+.linkbtn { background: none; border: 0; color: #BFE3D6; font: inherit; text-decoration: underline; cursor: pointer; }
+@media (max-width: 600px) {
+  .overlay { gap: 10px; padding: 14px; }
+  .overlay .sub { font-size: 14px; }
+  .btn { font-size: 13px; padding: 9px 14px; }
+}
+
+.fade { position: absolute; inset: 8px; border-radius: 6px; background: #18202B; color: #F3F5F6; display: flex; align-items: center; justify-content: center; font-family: "Silkscreen", monospace; font-size: clamp(14px, 2.6vw, 20px); text-align: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .35s; }
+.fade.on { opacity: 1; }
+.ride { display: inline-block; font-size: 40px; margin-bottom: 10px; }
+@media (prefers-reduced-motion: no-preference) { .fade.on .ride { animation: ride 1.2s ease-in-out both; } }
+@keyframes ride { from { transform: translateX(-120px); } to { transform: translateX(120px); } }
+
+.controls { display: none; justify-content: space-between; align-items: center; margin-top: 14px; padding: 0 8px; user-select: none; -webkit-user-select: none; }
+.dpad { display: grid; grid-template-columns: repeat(3, 54px); grid-template-rows: repeat(3, 54px); gap: 4px; }
+.ctrl { touch-action: none; border: 0; border-radius: 10px; background: #2A333C; color: #E8ECEE; font-size: 20px; cursor: pointer; box-shadow: 0 4px 0 #0b1015; }
+.ctrl:active { transform: translateY(2px); box-shadow: 0 2px 0 #0b1015; }
+.ctrl.u { grid-area: 1 / 2; } .ctrl.l { grid-area: 2 / 1; } .ctrl.r { grid-area: 2 / 3; } .ctrl.d { grid-area: 3 / 2; }
+.abtn { width: 78px; height: 78px; border-radius: 50%; background: #1F5C4E; font-family: "Silkscreen", monospace; font-size: 24px; }
+@media (hover: none), (max-width: 760px) { .controls { display: flex; } }
+.help { color: var(--muted); font-size: 14px; margin: 14px 4px 0; }
+.card { position: absolute; inset: 8px; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(24, 32, 43, .55); }
+.card[hidden] { display: none; }
+.card .panel { background: #FFFDF8; color: #18202B; border: 3px solid #18202B; border-radius: 10px; box-shadow: 0 5px 0 #18202B; padding: 20px 22px; max-width: 460px; width: 100%; max-height: 100%; overflow: auto; }
+.card .where { font-family: "Silkscreen", monospace; font-size: 12px; color: #1F5C4E; margin: 0 0 6px; }
+.card h2 { font-family: "Silkscreen", monospace; font-weight: 400; font-size: clamp(20px, 3.6vw, 28px); line-height: 1.15; margin: 0 0 10px; }
+.card .role { font-weight: 600; margin: 0 0 2px; }
+.card .meta { color: #5B6470; margin: 0 0 12px; font-size: 15px; }
+.card .sum { margin: 0 0 16px; line-height: 1.5; }
+.card .btn { font-size: 14px; border-color: #18202B; box-shadow: 0 4px 0 #0B2A23; }
+.choices { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.choice { text-align: left; font: inherit; font-size: 15px; background: #EEF2F0; color: #18202B; border: 2px solid transparent; border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+.choice.sel { border-color: #18202B; background: #DCEBE5; }
+.choice.sel::before { content: "▶ "; color: #1F5C4E; }
+@media (max-width: 600px) { .card .panel { padding: 14px 16px; } .card .sum { font-size: 14px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <span class="name">Akshay Malavade</span>
+    <span>
+      <a class="li" href="#" target="_blank" rel="noopener">LinkedIn</a>
+      &nbsp;&nbsp;<a href="https://aksmalav.github.io/" target="_blank" rel="noopener">Portfolio</a>
+    </span>
+  </div>
+
+  <div class="frame" id="frame">
+    <div class="hud">
+      <span id="place">Rutgers</span>
+      <div class="slots" aria-label="Collected items">
+        <span class="slot" data-id="rutgers" title="Rutgers">📐</span>
+        <span class="slot" data-id="zs" title="ZS">🔮</span>
+        <span class="slot" data-id="truepill" title="Truepill">💊</span>
+        <span class="slot" data-id="candid" title="Candid Health">📜</span>
+        <span class="slot" data-id="luminai" title="Luminai">🤖</span>
+        <span class="sep" aria-hidden="true"></span>
+        <span class="slot bonus" data-id="pizza" title="Bonus: pizza">🍕</span>
+        <span class="slot bonus" data-id="rings" title="Bonus: rings">🤸</span>
+      </div>
+      <a href="https://aksmalav.github.io/" target="_blank" rel="noopener">Skip to portfolio</a>
+    </div>
+
+    <canvas id="game" aria-label="Pixel-art game world showing Akshay's career stops"></canvas>
+
+    <div class="dialog" id="dialog" role="dialog" aria-live="polite">
+      <div class="who" id="who"></div>
+      <p id="text"></p>
+      <div class="choices" id="choices"></div>
+      <span class="next" id="nexthint">Space / tap ▼</span>
+    </div>
+
+    <div class="card" id="card" hidden>
+      <div class="panel" role="dialog" aria-live="polite">
+        <p class="where" id="cWhere"></p>
+        <h2 id="cTitle"></h2>
+        <p class="role" id="cRole"></p>
+        <p class="meta" id="cMeta"></p>
+        <p class="sum" id="cSum"></p>
+        <button class="btn" id="cGo">Explore</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="title">
+      <p class="who-line">Akshay Malavade</p>
+      <h1>Play my career</h1>
+      <p class="sub">Short on time? Connect with me on LinkedIn. Curious? Take a two-minute walk from Rutgers to Columbia, by way of New York and California.</p>
+      <div class="btns">
+        <a class="btn li" href="#" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        <button class="btn alt" id="play">Play the game</button>
+      </div>
+      <p class="small">Or <a href="https://aksmalav.github.io/" target="_blank" rel="noopener">view my portfolio</a> or <a href="mailto:am7053@gsb.columbia.edu">email me</a></p>
+    </div>
+
+    <div class="overlay" id="ending" hidden>
+      <h1>Quest complete</h1>
+      <p class="sub">Engineering roots, healthcare analytics, and three startups spent shipping products that fix real operational problems. The next chapter is a product management internship for summer 2027. Maybe on your team?</p>
+      <div class="btns">
+        <a class="btn li" href="#" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        <a class="btn alt" href="mailto:am7053@gsb.columbia.edu">Email Akshay</a>
+      </div>
+      <p class="small"><a href="https://aksmalav.github.io/" target="_blank" rel="noopener">View portfolio</a></p>
+      <button class="linkbtn" id="keep">Keep exploring</button>
+    </div>
+
+    <div class="fade" id="fade"><span id="fadeText"></span></div>
+  </div>
+
+  <div class="controls" aria-label="Game controls">
+    <div class="dpad">
+      <button class="ctrl u" data-dir="up" aria-label="Move up">▲</button>
+      <button class="ctrl l" data-dir="left" aria-label="Move left">◀</button>
+      <button class="ctrl r" data-dir="right" aria-label="Move right">▶</button>
+      <button class="ctrl d" data-dir="down" aria-label="Move down">▼</button>
+    </div>
+    <button class="ctrl abtn" id="abtn" aria-label="Talk or continue">A</button>
+  </div>
+
+  <p class="help">Arrow keys or WASD to move. Walk into people, doors, trains and planes to interact. Space or Enter to continue. Built with Claude.</p>
+</div>
+
+<script>
+/* Swap in the real profile URL here */
+const LINKEDIN = 'https://www.linkedin.com/in/akshaymalavade/';
+document.querySelectorAll('a.li').forEach(a => a.href = LINKEDIN);
+
+const T = 32, COLS = 20, ROWS = 14;
+const cv = document.getElementById('game');
+const ctx = cv.getContext('2d');
+cv.width = COLS * T; cv.height = ROWS * T;
+
+const SEQ = ['rutgers', 'zs', 'truepill', 'candid', 'luminai', 'columbia'];
+
+/* ---------- Story content ---------- */
+const CH = {
+  rutgers: {
+    short: 'Rutgers', place: 'Rutgers, College Ave', region: 'NJ', travelName: 'New Brunswick',
+    card: { where: 'Chapter 1', title: 'Rutgers University', role: 'BS, Industrial Engineering', meta: 'College Avenue campus, New Brunswick, NJ. 2016 to 2020.', sum: 'Where it all started: learning how systems really work, and how to make them work better.' },
+    npc: { name: 'Professor', lines: [
+      { who: 'Professor', t: 'Akshay! Industrial engineering, class of 2020. Remind me how those four years went?' },
+      { who: 'Akshay', t: 'Graduated summa cum laude with a 3.8, on a merit scholarship for the top 10% of engineering students.' },
+      { who: 'Akshay', t: "Along the way, I won the PwC Case Challenge, made the semifinals of Accenture's Innovation Challenge, and interned at Semler Brossy and Bristol Myers Squibb." }
+    ] },
+    icon: '📐', item: "Engineer's toolkit",
+    recap: 'Rutgers, where I learned to see every messy process as a system worth redesigning.'
+  },
+  zs: {
+    short: 'ZS in New York', place: 'ZS, New York', region: 'NY', travelName: 'New York City',
+    card: { where: 'Chapter 2', title: 'ZS Associates', role: 'Decision Analytics Associate', meta: 'New York, NY. 2020 to 2022.', sum: 'Healthcare consulting for pharma clients: forecasting, market research, and learning how big organizations make decisions.' },
+    npc: { name: 'Pharma client', lines: [
+      { who: 'Pharma client', t: 'We manage a $6B+ medication portfolio and need forecasts we can actually plan around.' },
+      { who: 'Akshay', t: "I built long-term forecasts aligned to their strategy and became the client's go-to forecasting expert." },
+      { who: 'Akshay', t: 'Stakeholder workshops on patient journey gaps also surfaced recommendations worth ~$41M in potential savings for this Fortune 50 client.' }
+    ] },
+    icon: '🔮', item: 'Crystal ball',
+    recap: "ZS, where I became a Fortune 50 client's forecasting expert."
+  },
+  truepill: {
+    short: 'Truepill in California', place: 'Truepill, California', region: 'CA', travelName: 'Hayward, California',
+    card: { where: 'Chapter 3', title: 'Truepill', role: 'Customer Strategy Associate, then Customer Strategy & Growth Manager', meta: 'Hayward, CA. 2022 to 2023.', sum: 'An API-first digital pharmacy platform that served 10M+ patients at its peak.' },
+    npc: { name: 'Analyst', lines: [
+      { who: 'Analyst', t: 'Controlled substance dispensing volumes are running unusually high for some clients.' },
+      { who: 'Akshay', t: 'I weighed the revenue against the compliance risk, brought a recommendation to the founder, and drove adoption of patient verification protocols.' },
+      { who: 'Akshay', t: 'Those dispensing volumes went to zero. On the commercial side, I redesigned pricing to take a key account from -5% to +9% margin.' }
+    ] },
+    icon: '💊', item: 'Verification seal',
+    recap: 'Truepill, where I learned to make the hard call between revenue and doing the right thing.'
+  },
+  candid: {
+    short: 'Candid Health in New York', place: 'Candid Health, New York', region: 'NY', travelName: 'New York City',
+    card: { where: 'Chapter 4', title: 'Candid Health', role: 'Strategy & Operations Manager', meta: 'New York, NY. 2024 to 2025.', sum: 'A Series D medical billing platform founded by ex-Palantir leaders, serving 200+ healthcare organizations.' },
+    npc: { name: 'Customer', lines: [
+      { who: 'Customer', t: 'Setting up our own billing rules is confusing. Where do I even start?' },
+      { who: 'Akshay', t: 'During the beta, I ran user feedback sessions, mapped where people got stuck, and turned those insights into UI changes with Product Design.' },
+      { who: 'Akshay', t: 'Rules page usage rose 15%. I also unblocked a $300K customer stalled for months, cutting their support tickets by 90%.' },
+      { who: 'Akshay', t: "And with our COO, I turned around the company's most at-risk client in under a month, lifting revenue recognition from under 40% to 95%+." }
+    ] },
+    icon: '📜', item: 'Rules scroll',
+    recap: 'Candid Health, where user research turned a confusing feature into one people used.'
+  },
+  luminai: {
+    short: 'Luminai in California', place: 'Luminai, California', region: 'CA', travelName: 'California',
+    card: { where: 'Chapter 5', title: 'Luminai', role: 'Product Operations / AI Deployment Strategist', meta: '2026.', sum: 'A Series B AI operations platform backed by General Catalyst and Y Combinator.' },
+    npc: { name: 'Front-line staffer', lines: [
+      { who: 'Front-line staffer', t: "This notification queue never ends. We'd rather be spending our time with patients." },
+      { who: 'Akshay', t: "I interviewed the team, won buy-in from the health system's CIO, and led two AI automations from design to go-live as the sole PM." },
+      { who: 'Akshay', t: 'The 40,000-task backlog was cleared in 3 days. Across the 17 automations I owned: 99% uptime and $3.8M in annual impact.' },
+      { who: 'Akshay', t: "I also built the company's first engineering capacity dashboard with Claude Code, saving about $60K a year in labor costs." }
+    ] },
+    icon: '🤖', item: 'AI helper bot',
+    recap: 'Luminai, where I owned AI products end to end, from user interviews to launch.'
+  },
+  columbia: {
+    short: 'Columbia in Manhattanville', place: 'Columbia, Manhattanville', region: 'NY', travelName: 'Manhattanville',
+    card: { where: 'Final chapter', title: 'Columbia Business School', role: 'MBA, Product Management. Class of 2028.', meta: 'Manhattanville, New York, NY.', sum: 'Consortium Fellow and Chief of Staff of Student Government, building the product toolkit for what comes next.' },
+    npc: { name: 'Recruiter', lines: [
+      { who: 'Recruiter', t: "So, Akshay. Rutgers, ZS, three startups, and now Columbia. What's next?" },
+      { who: 'Akshay', t: 'A product management internship for summer 2027, building products that take the busywork out of hard problems.' }
+    ] },
+    recap: 'Columbia, the chapter I am writing right now.'
+  },
+  home: {
+    short: 'hometown', place: 'Hometown, Central Jersey', region: 'NJ', travelName: 'Central Jersey',
+    card: { where: 'Home base', title: 'Hometown', role: 'Central Jersey', meta: 'Born and raised in New Jersey.', sum: 'Grab a slice at the pizza and bakery shop, or hit the rings in the park, then head back out on the journey.' },
+    npc: { name: 'Neighbor', flavor: true, lines: [
+      { who: 'Neighbor', t: "Welcome home, Akshay! The oven's fired up at the pizza place, and the rings are out in the park." }
+    ] }
+  }
+};
+
+const THEMES = {
+  campus: { ground: '#86C26C', detail: '#72AF59', path: '#C98E6B', pathDot: '#B27556', water: '#4F86B5', wave: '#7FB0D6' },
+  home:   { ground: '#8CC66F', detail: '#77B35C', path: '#E4D09B', pathDot: '#CDB67C', water: '#4F86B5', wave: '#7FB0D6' },
+  nyc:    { ground: '#CFD3D8', detail: '#BCC1C7', path: '#5B636D', pathDot: '#E7C64A', water: '#3F79A8', wave: '#6AA0C9' },
+  ca:     { ground: '#EFDCAB', detail: '#DCC58D', path: '#DCC48C', pathDot: '#C7AD72', water: '#4AA3C8', wave: '#8FD0E6' }
+};
+
+function makeGrid(B, opts = {}) {
+  const rows = [];
+  for (let y = 0; y < ROWS; y++) {
+    const r = [];
+    for (let x = 0; x < COLS; x++) {
+      let c = '.';
+      if (y === 0 || y === ROWS - 1 || x === 0 || x === COLS - 1) c = B;
+      else if (y === 6 || y === 11) c = '=';
+      else if (y > 6 && y < 11 && x === 9) c = '=';
+      r.push(c);
+    }
+    rows.push(r);
+  }
+  (opts.fill || []).forEach(([x0, y0, x1, y1, c]) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) rows[y][x] = c; });
+  (opts.tiles || []).forEach(([x, y, c]) => rows[y][x] = c);
+  return rows.map(r => r.join(''));
+}
+
+const TRAIN = () => ({ x: 2, y: 9, w: 6, h: 2, vehicle: 'train', label: ['Trains'], act: 'train' });
+const PLANE = (x = 13) => ({ x, y: 8, w: 5, h: 3, vehicle: 'plane', label: ['Flights'], act: 'plane' });
+
+const SCENES = {
+  rutgers: {
+    theme: 'campus', spawn: [9, 7],
+    grid: makeGrid('T', { fill: [[0, 12, 19, 13, '~']], tiles: [[3, 2, 'T'], [5, 4, 'T'], [8, 2, 'T'], [11, 2, 'T'], [8, 4, 'T'], [11, 4, 'T'], [14, 2, 'T'], [16, 4, 'T'], [2, 4, 'f'], [6, 2, 'f'], [9, 1, 'f'], [13, 4, 'f'], [17, 2, 'f']] }),
+    buildings: [TRAIN(), PLANE()],
+    objects: [{ x: 10, y: 3, kind: 'sign', act: 'say:Rutgers University, College Avenue campus. The Raritan River runs right alongside.' }],
+    npc: { x: 7, y: 7, shirt: '#A4232F' }
+  },
+  zs: {
+    theme: 'nyc', spawn: [15, 11],
+    grid: makeGrid('X', { fill: [[1, 1, 4, 4, 'X'], [15, 1, 18, 4, 'X']] }),
+    buildings: [
+      { x: 6, y: 1, w: 8, h: 5, label: ['ZS Associates'], roof: '#2B3A55', wall: '#D6DBE3', act: "say:ZS's New York office, home to two years of forecasting models and client workshops." },
+      TRAIN(), PLANE()
+    ],
+    objects: [{ x: 4, y: 8, kind: 'cart', act: 'say:A classic New York slice. Akshay is still refining his definitive NYC pizza ranking.' }],
+    npc: { x: 12, y: 7, shirt: '#3B6EA5' }
+  },
+  truepill: {
+    theme: 'ca', spawn: [15, 11],
+    grid: makeGrid('P', { fill: [[0, 12, 19, 13, '~']], tiles: [[2, 2, 'P'], [4, 4, 'P'], [16, 2, 'P'], [17, 4, 'P']] }),
+    buildings: [
+      { x: 6, y: 1, w: 8, h: 5, label: ['Truepill', 'Hayward, CA'], roof: '#D4622F', wall: '#F7ECDC', act: 'say:Truepill HQ. Pharmacy infrastructure for digital health companies.' },
+      PLANE()
+    ],
+    objects: [{ x: 4, y: 8, kind: 'sign', act: 'say:Welcome to Hayward, California, on the east side of the Bay.' }],
+    npc: { x: 12, y: 7, shirt: '#0F766E' }
+  },
+  candid: {
+    theme: 'nyc', spawn: [14, 11],
+    grid: makeGrid('X', { fill: [[1, 1, 4, 4, 'X'], [17, 1, 18, 12, '~']] }),
+    buildings: [
+      { x: 6, y: 1, w: 8, h: 5, label: ['Candid Health'], roof: '#6A4C93', wall: '#ECE7F3', act: 'say:Candid Health, where medical billing meets software.' },
+      TRAIN(), PLANE(12)
+    ],
+    objects: [{ x: 4, y: 8, kind: 'cart', act: 'say:Another pizza cart. The NYC pizza ranking research continues.' }],
+    npc: { x: 11, y: 7, shirt: '#B45309' }
+  },
+  luminai: {
+    theme: 'ca', spawn: [15, 11],
+    grid: makeGrid('P', { fill: [[0, 12, 19, 13, '~']], tiles: [[2, 3, 'P'], [4, 1, 'P'], [16, 3, 'P'], [17, 1, 'P']] }),
+    buildings: [
+      { x: 6, y: 1, w: 8, h: 5, label: ['Luminai'], roof: '#2C7A7B', wall: '#EAF4F3', act: 'say:Luminai. AI automations for healthcare operations.' },
+      PLANE()
+    ],
+    objects: [{ x: 4, y: 8, kind: 'sign', act: 'say:Welcome to the startup coast.' }],
+    npc: { x: 12, y: 7, shirt: '#BE185D' }
+  },
+  columbia: {
+    theme: 'nyc', spawn: [14, 11],
+    grid: makeGrid('X', { fill: [[1, 1, 4, 4, 'X'], [17, 1, 18, 12, '~']] }),
+    buildings: [
+      { x: 6, y: 1, w: 8, h: 5, label: ['Columbia Business School', 'Manhattanville'], roof: '#4A7FB5', wall: '#E8EEF5', act: "say:Columbia Business School's home in Manhattanville, right by the Hudson." },
+      TRAIN(), PLANE(12)
+    ],
+    objects: [],
+    npc: { x: 11, y: 7, shirt: '#475569' }
+  },
+  home: {
+    theme: 'home', spawn: [15, 11],
+    grid: makeGrid('T', { tiles: [[7, 2, 'T'], [11, 2, 'T'], [8, 5, 'f'], [10, 5, 'f'], [7, 4, 'f'], [2, 12, 'f'], [12, 12, 'f']] }),
+    buildings: [
+      { x: 2, y: 2, w: 4, h: 4, label: ['Home'], roof: '#B5533C', wall: '#F1E3C8', act: 'say:Home in Central Jersey. Always good to be back.' },
+      { x: 13, y: 2, w: 5, h: 4, label: ['Pizza & Bakery'], roof: '#2F6B3A', wall: '#F4E9D4', act: 'pizza' },
+      TRAIN(), PLANE()
+    ],
+    objects: [
+      { x: 9, y: 3, kind: 'rings', act: 'rings' },
+      { x: 4, y: 8, kind: 'sign', act: 'say:Welcome to Central Jersey. Hometown of one future product manager.' }
+    ],
+    npc: { x: 7, y: 7, shirt: '#D98A2B' }
+  }
+};
+
+const WALK = new Set(['.', '=', 'f']);
+const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+
+/* ---------- State ---------- */
+const P = { tx: 9, ty: 7, x: 0, y: 0, face: 'down' };
+let scene = 'rutgers', occ = new Map(), mv = null, held = [], dlg = null;
+let playing = false, fading = false, cardOpen = false, cooldown = 0, furthest = 0;
+const items = new Set(), bonus = new Set(), visited = new Set(), talked = new Set();
+
+const $ = id => document.getElementById(id);
+const dlgEl = $('dialog'), whoEl = $('who'), txtEl = $('text'), chEl = $('choices'), hintEl = $('nexthint');
+
+function loadScene(name) {
+  scene = name;
+  const s = SCENES[name];
+  [P.tx, P.ty] = s.spawn; P.x = P.tx * T; P.y = P.ty * T; P.face = 'down';
+  mv = null; occ = new Map();
+  s.buildings.forEach(b => { for (let i = 0; i < b.w; i++) for (let j = 0; j < b.h; j++) occ.set((b.x + i) + ',' + (b.y + j), { type: 'b', ref: b }); });
+  s.objects.forEach(o => occ.set(o.x + ',' + o.y, { type: 'o', ref: o }));
+  occ.set(s.npc.x + ',' + s.npc.y, { type: 'n' });
+  $('place').textContent = CH[name].place;
+  const i = SEQ.indexOf(name);
+  if (i > furthest) furthest = i;
+}
+
+/* ---------- Arrival card ---------- */
+function showCard(name, cb) {
+  const c = CH[name].card;
+  $('cWhere').textContent = c.where; $('cTitle').textContent = c.title;
+  $('cRole').textContent = c.role; $('cMeta').textContent = c.meta; $('cSum').textContent = c.sum;
+  cardOpen = true; $('card').hidden = false; $('cGo').focus();
+  cardDone = cb;
+}
+let cardDone = null;
+function closeCard() {
+  if (!cardOpen) return;
+  cardOpen = false; $('card').hidden = true; if (document.activeElement) document.activeElement.blur(); held = []; cooldown = performance.now() + 250;
+  const cb = cardDone; cardDone = null; if (cb) cb();
+}
+$('cGo').addEventListener('click', closeCard);
+
+/* ---------- Dialog ---------- */
+let sel = 0;
+function say(lines, cb) { dlg = { lines, i: 0, cb }; renderDlg(); dlgEl.style.display = 'block'; }
+function renderDlg() {
+  const l = dlg.lines[dlg.i];
+  whoEl.textContent = l.who || ''; whoEl.style.display = l.who ? 'block' : 'none';
+  txtEl.textContent = l.t;
+  chEl.innerHTML = '';
+  if (l.choices) {
+    sel = 0; hintEl.style.display = 'none';
+    l.choices.forEach((c, i) => {
+      const b = document.createElement('button');
+      b.className = 'choice'; b.textContent = c.label;
+      b.addEventListener('click', e => { e.stopPropagation(); sel = i; choose(); });
+      chEl.appendChild(b);
+    });
+    paintSel();
+  } else hintEl.style.display = '';
+}
+function paintSel() { [...chEl.children].forEach((b, i) => b.classList.toggle('sel', i === sel)); }
+function closeDlg() { dlg = null; dlgEl.style.display = 'none'; held = []; cooldown = performance.now() + 250; }
+function choose() {
+  const c = dlg.lines[dlg.i].choices[sel];
+  closeDlg();
+  if (c.fn) c.fn();
+}
+function advance() {
+  if (!dlg) return;
+  if (dlg.lines[dlg.i].choices) return choose();
+  dlg.i++;
+  if (dlg.i >= dlg.lines.length) { const cb = dlg.cb; closeDlg(); if (cb) cb(); }
+  else renderDlg();
+}
+dlgEl.addEventListener('click', () => { if (dlg && !dlg.lines[dlg.i].choices) advance(); });
+
+/* ---------- Actions ---------- */
+function updateHud() {
+  document.querySelectorAll('.slot').forEach(s => s.classList.toggle('got', items.has(s.dataset.id) || bonus.has(s.dataset.id)));
+}
+function talkNpc() {
+  const c = CH[scene];
+  const first = !talked.has(scene);
+  talked.add(scene);
+  if (scene === 'columbia') return say(c.npc.lines, showEnding);
+  if (c.npc.flavor) return say(c.npc.lines);
+  if (!first) return say([{ who: 'Akshay', t: c.recap }]);
+  items.add(scene); updateHud();
+  say([...c.npc.lines,
+    { who: '', t: `You got the ${c.icon} ${c.item}! (${items.size} of 5)` },
+    { who: '', t: 'When you are ready, take the train or plane to move on.' }]);
+}
+function getBonus(id, lines, label) {
+  const first = !bonus.has(id);
+  bonus.add(id); updateHud();
+  say(first ? [...lines, { who: '', t: `Bonus: ${label}` }] : lines);
+}
+function travel(dest) {
+  const flying = modeFor(scene, dest) === 'plane';
+  fading = true;
+  $('fadeText').innerHTML = `<span class="ride">${flying ? '✈️' : '🚆'}</span><br>${flying ? 'Flying' : 'Taking the train'} to ${CH[dest].travelName}...`;
+  $('fade').classList.add('on');
+  setTimeout(() => {
+    loadScene(dest);
+    setTimeout(() => {
+      $('fade').classList.remove('on'); fading = false;
+      if (!visited.has(dest)) { visited.add(dest); showCard(dest); }
+    }, 450);
+  }, 950);
+}
+function modeFor(a, b) { return (CH[a].region === 'CA' || CH[b].region === 'CA') ? 'plane' : 'train'; }
+function destinations() {
+  const d = [];
+  if (scene === 'home') {
+    if (furthest < SEQ.length - 1) d.push({ to: SEQ[furthest + 1], label: `Continue the journey: ${CH[SEQ[furthest + 1]].short}` });
+    d.push({ to: SEQ[furthest], label: `Go back to ${CH[SEQ[furthest]].short}` });
+  } else {
+    const i = SEQ.indexOf(scene);
+    if (i < SEQ.length - 1) d.push({ to: SEQ[i + 1], label: `Next stop: ${CH[SEQ[i + 1]].short}`, next: true });
+    else d.push({ to: 'rutgers', label: 'Start over at Rutgers' });
+    d.push({ to: 'home', label: 'Back to hometown' });
+  }
+  return d;
+}
+function depart(mode) {
+  const all = destinations();
+  const mine = all.filter(d => modeFor(scene, d.to) === mode);
+  const who = mode === 'plane' ? 'Gate agent' : 'Conductor';
+  if (!mine.length) {
+    const other = all[0];
+    return say([{ who, t: `No ${mode === 'plane' ? 'flights' : 'trains'} to where you are headed. ${other.label.replace(/^[^:]+: /, '')} is a ${mode === 'plane' ? 'train' : 'flight'} away.` }]);
+  }
+  const opts = mine.map(d => ({ label: d.label, fn: () => travel(d.to) }));
+  opts.push({ label: 'Stay a little longer', fn: null });
+  say([{ who, t: mode === 'plane' ? 'Now boarding. Where are you flying?' : 'All aboard! Where to?', choices: opts }]);
+}
+function showEnding() { playing = false; $('ending').hidden = false; $('ending').querySelector('.btn').focus(); }
+
+function runAct(act) {
+  if (act.startsWith('say:')) return say([{ who: '', t: act.slice(4) }]);
+  if (act === 'train' || act === 'plane') return depart(act);
+  if (act === 'pizza') return getBonus('pizza', [
+    { who: 'Pizza & Bakery', t: 'The wood-fired oven is roaring.' },
+    { who: 'Akshay', t: 'Stretch the dough, ladle the sauce, tear the mozzarella, and slide it in. A minute or two later: a blistered, leopard-spotted crust.' },
+    { who: 'Akshay', t: 'On the side, a sourdough loaf is proofing. That makes 50+ loaves and counting.' }
+  ], '🍕 Fresh pie');
+  if (act === 'rings') return getBonus('rings', [
+    { who: 'Park', t: 'A set of gymnastic rings hangs from the bar.' },
+    { who: 'Akshay', t: 'Rings reward the same things good products do: steady practice and small, compounding improvements.' }
+  ], '🤸 Rings session');
+}
+function interact(o, ty) {
+  if (o.type === 'b') { if (o.ref.vehicle || ty === o.ref.y + o.ref.h - 1) runAct(o.ref.act); }
+  else if (o.type === 'o') runAct(o.ref.act);
+  else if (o.type === 'n') talkNpc();
+}
+function attempt(dir) {
+  P.face = dir;
+  const [dx, dy] = DIRS[dir];
+  const tx = P.tx + dx, ty = P.ty + dy;
+  if (tx < 0 || ty < 0 || tx >= COLS || ty >= ROWS) return;
+  const o = occ.get(tx + ',' + ty);
+  if (o) return interact(o, ty);
+  if (!WALK.has(SCENES[scene].grid[ty][tx])) return;
+  mv = { fx: P.tx, fy: P.ty, tx, ty, t: 0 };
+}
+function action() {
+  if (!playing || fading) return;
+  if (cardOpen) return closeCard();
+  if (dlg) return advance();
+  if (mv) return;
+  const [dx, dy] = DIRS[P.face];
+  const o = occ.get((P.tx + dx) + ',' + (P.ty + dy));
+  if (o) interact(o, P.ty + dy);
+}
+function moveSel(d) {
+  const n = dlg.lines[dlg.i].choices.length;
+  sel = (sel + (d === 'up' || d === 'left' ? -1 : 1) + n) % n; paintSel();
+}
+
+/* ---------- Input ---------- */
+const KEYS = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' };
+addEventListener('keydown', e => {
+  if (!playing) return;
+  const d = KEYS[e.code];
+  if (d) {
+    e.preventDefault();
+    if (dlg && dlg.lines[dlg.i].choices) { if (!e.repeat) moveSel(d); return; }
+    if (!dlg && !cardOpen && !held.includes(d)) held.push(d);
+    return;
+  }
+  if (['Space', 'Enter', 'KeyE', 'KeyZ'].includes(e.code)) {
+    e.preventDefault(); if (!e.repeat) action();
+  }
+});
+addEventListener('keyup', e => { const d = KEYS[e.code]; if (d) held = held.filter(h => h !== d); });
+document.querySelectorAll('.ctrl[data-dir]').forEach(b => {
+  const d = b.dataset.dir;
+  b.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    if (!playing) return;
+    if (dlg && dlg.lines[dlg.i].choices) return moveSel(d);
+    if (!dlg && !cardOpen) held = [d];
+  });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, () => { held = held.filter(h => h !== d); }));
+});
+$('abtn').addEventListener('pointerdown', e => { e.preventDefault(); action(); });
+
+$('play').addEventListener('click', () => {
+  $('title').hidden = true; playing = true; $('play').blur();
+  visited.add('rutgers');
+  const touch = matchMedia('(hover: none)').matches;
+  showCard('rutgers', () => say([
+    { who: '', t: 'Each stop has someone to talk to. Find them to hear the highlights and collect a career item, then hop on the train or plane to move on.' },
+    { who: 'Controls', t: touch ? 'Use the arrows to move and A to talk or continue.' : 'Arrow keys or WASD to move. Walk into people and doors to talk. Space or Enter to continue.' }
+  ]));
+});
+$('keep').addEventListener('click', () => { $('ending').hidden = true; playing = true; $('keep').blur(); });
+
+/* ---------- Drawing ---------- */
+const hash = (x, y) => (x * 73 + y * 37) % 7;
+function R(c, x, y, w, h) { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+
+function drawTile(ch, x, y, s) {
+  const th = THEMES[s.theme], X = x * T, Y = y * T, h = hash(x, y), g = s.grid;
+  if (ch === '~') { R(th.water, X, Y, T, T); R(th.wave, X + 4 + (h % 3) * 6, Y + 8 + (h % 2) * 12, 10, 2); return; }
+  if (ch === '=') {
+    R(th.path, X, Y, T, T);
+    if (s.theme === 'nyc') {
+      const horiz = g[y][x - 1] === '=' && g[y][x + 1] === '=';
+      const vert = (g[y - 1] || '')[x] === '=' && (g[y + 1] || '')[x] === '=';
+      if (horiz && !vert) R(th.pathDot, X + 10, Y + 15, 12, 2);
+      else if (vert && !horiz) R(th.pathDot, X + 15, Y + 10, 2, 12);
+    } else if (s.theme === 'campus') {
+      R(th.pathDot, X, Y + 15, T, 1); R(th.pathDot, X + (y % 2 ? 8 : 24), Y, 1, 15); R(th.pathDot, X + (y % 2 ? 24 : 8), Y + 16, 1, 16);
+    } else if (h === 3) R(th.pathDot, X + 9, Y + 18, 4, 3);
+    return;
+  }
+  if (ch === 'X') {
+    R('#6F7C8A', X, Y, T, T);
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) R(((x + i + j * y) % 4 === 0) ? '#4A5562' : '#9CC3DD', X + 4 + i * 9, Y + 4 + j * 9, 6, 6);
+    return;
+  }
+  R(th.ground, X, Y, T, T);
+  if (s.theme === 'nyc') { R(th.detail, X, Y + T - 1, T, 1); R(th.detail, X + T - 1, Y, 1, T); }
+  else if (h < 2) R(th.detail, X + 6 + h * 12, Y + 10 + h * 8, 3, 4);
+  if (ch === 'T') {
+    R('#6B4A2B', X + 13, Y + 20, 6, 10);
+    R('#3F8F4A', X + 5, Y + 4, 22, 18); R('#2F7038', X + 5, Y + 18, 22, 4); R('#56A862', X + 9, Y + 7, 9, 6);
+  } else if (ch === 'P') {
+    R('#8A6A43', X + 14, Y + 10, 5, 21); R('#7A5C38', X + 14, Y + 16, 5, 2); R('#7A5C38', X + 14, Y + 23, 5, 2);
+    R('#3D9A5B', X + 8, Y + 2, 16, 10); R('#3D9A5B', X + 3, Y + 6, 26, 5);
+    R('#2F7D48', X + 1, Y + 10, 7, 4); R('#2F7D48', X + 24, Y + 10, 7, 4);
+    R('#6B4A2B', X + 13, Y + 11, 3, 3); R('#6B4A2B', X + 17, Y + 11, 3, 3);
+  } else if (ch === 'f') {
+    [[8, 10], [20, 8], [14, 20]].forEach(([a, b], i) => { R(i === 1 ? '#F4C9DD' : '#FFFFFF', X + a, Y + b, 5, 5); R('#F2C14E', X + a + 1, Y + b + 1, 3, 3); });
+  }
+}
+
+function marker(mx, my, glyph, now) {
+  const bob = Math.sin(now / 250) * 2;
+  ctx.fillStyle = '#18202B'; ctx.beginPath(); ctx.arc(mx, my + bob, 9, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#F2C14E'; ctx.beginPath(); ctx.arc(mx, my + bob, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#18202B'; ctx.font = '700 12px Arial, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(glyph, mx, my + bob + 1);
+}
+
+function drawVehicle(b, now) {
+  const X = b.x * T, Y = b.y * T, W = b.w * T, H = b.h * T;
+  if (b.vehicle === 'train') {
+    R('#8A8F96', X - 4, Y + H - 14, W + 8, 3); R('#8A8F96', X - 4, Y + H - 6, W + 8, 3);
+    for (let i = 0; i < W + 8; i += 10) R('#6B4A2B', X - 4 + i, Y + H - 16, 4, 14);
+    R('#C9CED6', X + 4, Y + 10, W - 18, 34);
+    R('#C9CED6', X + W - 22, Y + 16, 16, 28); R('#9AA3AD', X + W - 10, Y + 22, 6, 16);
+    R('#3D6FA8', X + 4, Y + 32, W - 8, 5);
+    for (let i = 0; i < 7; i++) R('#2B3A55', X + 12 + i * 22, Y + 16, 14, 11);
+    R('#3A3F46', X + 10, Y + 44, 10, 6); R('#3A3F46', X + W - 34, Y + 44, 10, 6);
+  } else {
+    R('#4B5563', X, Y + 6, W, H - 6); R('#5B6470', X, Y + 6, W, 3);
+    for (let i = 0; i < W; i += 24) R('#F3F5F6', X + 6 + i, Y + H - 12, 12, 3);
+    R('#AEB7BF', X + 44, Y + 52, 70, 10);
+    R('#F3F5F6', X + 14, Y + 34, W - 30, 20);
+    R('#F3F5F6', X + W - 18, Y + 38, 8, 14);
+    R('#3D6FA8', X + 14, Y + 14, 14, 22); R('#3D6FA8', X + 14, Y + 46, W - 28, 4);
+    for (let i = 0; i < 9; i++) R('#2B3A55', X + 34 + i * 10, Y + 39, 5, 5);
+    R('#2B3A55', X + W - 22, Y + 39, 8, 6);
+    R('#3A3F46', X + 50, Y + 56, 5, 6); R('#3A3F46', X + W - 32, Y + 56, 5, 6);
+  }
+  ctx.font = '600 12px "Schibsted Grotesk", Arial, sans-serif';
+  const pw = ctx.measureText(b.label[0]).width + 14, px = X + 6, py = Y - 4;
+  R('#18202B', px - 2, py - 2, pw + 4, 22); R('#FFFDF8', px, py, pw, 18);
+  ctx.fillStyle = '#18202B'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(b.label[0], px + 7, py + 3);
+  if (talked.has(scene) || scene === 'home') {
+    const goesNext = destinations().some(d => (d.next || scene === 'home') && modeFor(scene, d.to) === b.vehicle);
+    if (goesNext) marker(X + W - 14, Y + 4, '→', now);
+  }
+}
+
+function drawBuilding(b, now) {
+  if (b.vehicle) return drawVehicle(b, now);
+  const X = b.x * T, Y = b.y * T, W = b.w * T, H = b.h * T;
+  const roofH = Math.round(H * 0.42);
+  R('rgba(0,0,0,.16)', X + 5, Y + 6, W, H);
+  R(b.wall, X, Y + roofH - 4, W, H - roofH + 4);
+  R(b.roof, X - 3, Y, W + 6, roofH);
+  R('rgba(0,0,0,.18)', X - 3, Y + roofH - 6, W + 6, 6);
+  R('rgba(255,255,255,.12)', X - 3, Y, W + 6, 4);
+  const doorCol = Math.floor(b.w / 2), wallTop = Y + roofH;
+  for (let i = 0; i < b.w; i++) {
+    if (i === doorCol) continue;
+    R('#5D7A92', X + i * T + 8, wallTop + 6, 16, 12); R('#A9CBE4', X + i * T + 10, wallTop + 8, 12, 8);
+    if (b.h >= 4) { R('#5D7A92', X + i * T + 8, wallTop + 30, 16, 12); R('#A9CBE4', X + i * T + 10, wallTop + 32, 12, 8); }
+  }
+  const dx = X + doorCol * T, dy = Y + H - T;
+  R('#3A2A20', dx + 8, dy + 6, 16, 26); R('#5A4130', dx + 10, dy + 8, 12, 24); R('#F2C14E', dx + 18, dy + 19, 2, 2);
+  ctx.font = '600 12px "Schibsted Grotesk", Arial, sans-serif';
+  const pw = Math.min(W - 6, Math.max(...b.label.map(l => ctx.measureText(l).width)) + 14), ph = b.label.length * 14 + 6;
+  const px = X + W / 2 - pw / 2, py = Y + Math.max(3, (roofH - 6 - ph) / 2);
+  R('#18202B', px - 2, py - 2, pw + 4, ph + 4); R('#FFFDF8', px, py, pw, ph);
+  ctx.fillStyle = '#18202B'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  b.label.forEach((l, i) => ctx.fillText(l, X + W / 2, py + 4 + i * 14));
+}
+
+function drawObject(o) {
+  const X = o.x * T, Y = o.y * T;
+  if (o.kind === 'sign') {
+    R('#6B4A2B', X + 14, Y + 16, 4, 14); R('#7A5530', X + 3, Y + 5, 26, 15); R('#C89B5E', X + 5, Y + 7, 22, 11);
+    R('#7A5530', X + 9, Y + 10, 14, 2); R('#7A5530', X + 9, Y + 14, 10, 2);
+  } else if (o.kind === 'rings') {
+    R('#5A5F66', X + 2, Y + 2, 3, 28); R('#5A5F66', X + 27, Y + 2, 3, 28); R('#5A5F66', X + 2, Y + 2, 28, 3);
+    R('#D6C7A1', X + 10, Y + 5, 2, 11); R('#D6C7A1', X + 20, Y + 5, 2, 11);
+    ctx.strokeStyle = '#3A2A20'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(X + 11, Y + 20, 4.5, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(X + 21, Y + 20, 4.5, 0, Math.PI * 2); ctx.stroke();
+  } else if (o.kind === 'cart') {
+    for (let i = 0; i < 4; i++) R(i % 2 ? '#FFFFFF' : '#E04F3A', X + 2 + i * 7, Y + 2, 7, 7);
+    R('#3A3F46', X + 15, Y + 9, 2, 8); R('#C9CED6', X + 4, Y + 16, 24, 11); R('#F2C14E', X + 7, Y + 19, 8, 5);
+    R('#2B2B2B', X + 7, Y + 27, 5, 4); R('#2B2B2B', X + 20, Y + 27, 5, 4);
+  }
+}
+
+function drawPerson(x, y, shirt, face, step) {
+  R('rgba(0,0,0,.2)', x + 8, y + 28, 16, 3);
+  R('#2B3440', x + 11, y + 22, 4, step === 1 ? 5 : 7); R('#2B3440', x + 17, y + 22, 4, step === 2 ? 5 : 7);
+  R(shirt, x + 9, y + 13, 14, 10); R('rgba(0,0,0,.15)', x + 9, y + 20, 14, 3);
+  R('#A8754F', x + 10, y + 3, 12, 11); R('#1D1A18', x + 10, y + 1, 12, 4);
+  if (face === 'up') R('#1D1A18', x + 10, y + 1, 12, 10);
+  else if (face === 'left') { R('#1D1A18', x + 17, y + 1, 5, 9); R('#1D1A18', x + 12, y + 8, 2, 2); }
+  else if (face === 'right') { R('#1D1A18', x + 10, y + 1, 5, 9); R('#1D1A18', x + 18, y + 8, 2, 2); }
+  else { R('#1D1A18', x + 13, y + 8, 2, 2); R('#1D1A18', x + 18, y + 8, 2, 2); }
+}
+
+function draw(now) {
+  const s = SCENES[scene];
+  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) drawTile(s.grid[y][x], x, y, s);
+  s.objects.forEach(drawObject);
+  s.buildings.forEach(b => drawBuilding(b, now));
+  drawPerson(s.npc.x * T, s.npc.y * T, s.npc.shirt, 'down', 0);
+  if (!talked.has(scene)) marker(s.npc.x * T + 16, s.npc.y * T - 10, CH[scene].npc.flavor ? '…' : '!', now);
+  const step = mv ? (Math.floor(mv.t / 75) % 2) + 1 : 0;
+  drawPerson(P.x, P.y, '#1F5C4E', P.face, step);
+}
+
+/* ---------- Loop ---------- */
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(50, now - last); last = now;
+  if (mv) {
+    mv.t += dt;
+    const k = Math.min(1, mv.t / 150);
+    P.x = (mv.fx + (mv.tx - mv.fx) * k) * T; P.y = (mv.fy + (mv.ty - mv.fy) * k) * T;
+    if (k >= 1) { P.tx = mv.tx; P.ty = mv.ty; mv = null; }
+  }
+  if (!mv && !dlg && !cardOpen && playing && !fading && held.length && now > cooldown) attempt(held[held.length - 1]);
+  draw(now);
+  requestAnimationFrame(loop);
+}
+loadScene('rutgers');
+updateHud();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
