@@ -51,8 +51,8 @@ img { max-width: 100%; }
 
 /* Top navigation */
 .topnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--paper); border-bottom: 1px solid var(--rule); }
-.topnav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; }
-.brand { font-family: var(--serif); font-size: 19px; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.topnav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; }
+.brand { font-family: var(--serif); font-size: 26px; letter-spacing: -0.01em; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; }
 .navlinks { display: flex; gap: 28px; }
 .navlinks a, .navright a.plain { color: var(--muted); text-decoration: none; font-size: 15px; font-weight: 500; }
 .navlinks a:hover, .navright a.plain:hover { color: var(--ink); }
@@ -60,11 +60,12 @@ img { max-width: 100%; }
 .pill { border: 1px solid var(--ink); color: var(--ink) !important; border-radius: 999px; padding: 7px 16px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
 .pill:hover { background: var(--ink); color: var(--paper) !important; }
 @media (max-width: 720px) {
+  .brand { font-size: 22px; }
   .topnav .wrap { flex-wrap: wrap; gap: 4px 16px; padding-top: 10px; padding-bottom: 10px; }
   .navlinks { order: 3; width: 100%; gap: 22px; overflow-x: auto; padding: 4px 0 2px; }
   .navright a.plain { display: none; }
 }
-html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 84px); }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 96px); }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 
 /* Company strip */
@@ -249,14 +250,21 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
 
 .overlay h1 { max-width: none; animation: none; }
 .game-section .help { margin-top: 12px; }
+
+/* Scroll reveal */
+.js-reveal .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1) var(--d, 0ms), transform .8s cubic-bezier(.2,.7,.2,1) var(--d, 0ms), border-color .2s, background .2s; }
+.js-reveal .reveal.in { opacity: 1; transform: none; }
 </style>
+<script>
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) document.documentElement.classList.add('js-reveal');
+</script>
 </head>
 <body>
 <nav class="topnav" aria-label="Main">
   <div class="wrap">
     <a class="brand" href="#top">Akshay Malavade</a>
     <div class="navlinks">
-      <a href="#work">Work</a>
+      <a href="#work">Case studies</a>
       <a href="#experience">Experience</a>
       <a href="#about">About</a>
       <a href="#play-section">Play</a>
@@ -270,7 +278,7 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
 <div class="wrap" id="top">
 
 <header>
-  <div class="id">
+  <div class="id reveal" style="--d:0ms">
 <img class="photo" src="data:image/jpeg;base64,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" alt="Akshay Malavade">
     <div>
       <div class="id-name">Akshay Malavade</div>
@@ -278,15 +286,15 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
     </div>
   </div>
   <h1><span>Spot what's broken.</span> <span>Prove it with data.</span> <span>Automate it away.</span></h1>
-  <p class="lede">Industrial engineer by training, builder by habit. I started as a Decision Analytics Associate at ZS and most recently was an AI Deployment Strategist at Luminai, owning product strategy and roadmap for 17 automations at a $600K ACV account. I'm excited to be recruiting for Summer 2027 product management internships!</p>
-  <nav class="links" aria-label="Contact">
+  <p class="lede reveal" style="--d:250ms">Industrial engineer by training, builder by habit. I started as a Decision Analytics Associate at ZS and most recently was an AI Deployment Strategist at Luminai, owning product strategy and roadmap for 17 automations at a $600K ACV account. I'm excited to be recruiting for Summer 2027 product management internships!</p>
+  <nav class="links reveal" style="--d:400ms" aria-label="Contact">
     <a href="mailto:amalavade28@gsb.columbia.edu">Email me</a>
     <a href="#work">See my work</a>
     <a href="#play-section">Play my career &rarr;</a>
   </nav>
 </header>
 
-<div class="companies">
+<div class="companies reveal">
   <p class="eyebrow">Where I've been</p>
   <div class="marquee">
     <div class="track">
@@ -297,101 +305,97 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
 </div>
 
 <section id="work" aria-labelledby="work-title">
-  <h2 class="label" id="work-title">Selected work</h2>
+  <h2 class="label reveal" id="work-title">Case studies</h2>
   <div class="cards">
-      <button class="cs-card" type="button" aria-expanded="false" aria-controls="case-1">
+      <button class="cs-card reveal" style="--d:0ms" type="button" aria-expanded="false" aria-controls="case-1">
+        <span class="card-where">Luminai, 2026</span>
+        <span class="card-title">Fixing a workflow that only worked 40% of the time</span>
+        <span class="card-result">500% more output and every related support ticket eliminated.</span>
+        <span class="card-more">Read the case study</span>
+      </button>
+      <button class="cs-card reveal" style="--d:0ms" type="button" aria-expanded="false" aria-controls="case-2">
         <span class="card-where">Luminai, 2026</span>
         <span class="card-title">Clearing a 40,000-task backlog in three days</span>
         <span class="card-result">40K+ backlog cleared in 3 days and $110K+ in annual savings.</span>
         <span class="card-more">Read the case study</span>
       </button>
-      <button class="cs-card" type="button" aria-expanded="false" aria-controls="case-2">
+      <button class="cs-card reveal" style="--d:0ms" type="button" aria-expanded="false" aria-controls="case-3">
         <span class="card-where">Luminai, 2026</span>
         <span class="card-title">Building the first engineering capacity dashboard myself</span>
         <span class="card-result">Clearer staffing across 126+ workflows and ~$60K in annual labor savings.</span>
-        <span class="card-more">Read the case study</span>
-      </button>
-      <button class="cs-card" type="button" aria-expanded="false" aria-controls="case-3">
-        <span class="card-where">Candid Health, 2024 to 2025</span>
-        <span class="card-title">Making self-service billing rules usable</span>
-        <span class="card-result">Rules page usage up 15% after research-driven design changes.</span>
         <span class="card-more">Read the case study</span>
       </button>
   </div>
   <div class="case-panels">
     <article class="case-panel" id="case-1">
       <button class="case-close" type="button" aria-label="Close case study">Close</button>
-        
-          <h3>Clearing a 40,000 task backlog for a health system in three days</h3>
-          <p class="where">Luminai, sole product manager, 2026</p>
-        
-        <p class="result">40K+ backlog cleared in 3 days, $110K+ in annual savings.</p>
+        <h3>Fixing a patient workflow that only worked 40% of the time</h3>
+        <p class="where">Luminai, product lead, 2026</p>
+        <p class="result">500% more output, more accurate pre-visit assessments, and zero support tickets.</p>
         <dl class="steps">
-          <div><dt>Problem</dt><dd>A health system's front-line staff were buried under a growing queue of notifications that each needed manual handling, pulling time away from patient-facing work.</dd></div>
-          <div><dt>What I did</dt><dd>Ran user interviews with the staff doing the work, scoped two AI notification-clearing automations around what they actually needed, and pitched the client CIO to secure buy-in before building.</dd></div>
-          <div><dt>Shipped</dt><dd>Led both automations from design through go-live, defining launch KPIs and success criteria up front.</dd></div>
-          <div><dt>Bigger picture</dt><dd>These sat inside a portfolio of 17 automations I owned at the account, which held 99% uptime and drove $3.8M in annual impact (6x ROI). I also rebuilt a legacy workflow that was mismatching patient data via direct API integration, raising throughput 500%; that approach was later extended to Cleveland Clinic.</dd></div>
+          <div><dt>Spotted</dt><dd>One of the 17 workflows I owned was completing only 40% of its runs. Front-line operations staff and doctors were stuck manually linking each patient's previous appointment to their next one so visit details carried over. It kept coming up in my weekly meetings with the customer's directors, with the relationship and $100K+ in value at risk.</dd></div>
+          <div><dt>Proved</dt><dd>Instead of letting it limp along or rebuilding from scratch, which would have disrupted the teams relying on it, I traced the workflow end to end, from the manual process to the architecture diagram. The root cause: the automation wasn't identifying the correct patient to work.</dd></div>
+          <div><dt>Automated</dt><dd>Partnered with the client's data team on a direct API integration so the workflow automatically fetches the right patient and updates their record. Then I tested it with the customer to confirm pre-visit assessments and patient details updated correctly.</dd></div>
+          <div><dt>Result</dt><dd>Output grew 500% with far higher accuracy, pre-visit assessments were completed at a record pace, and every support ticket tied to the workflow disappeared. The approach was later extended to Cleveland Clinic, and the work was recognized at a company all-hands.</dd></div>
         </dl>
-      </article>
+    </article>
     <article class="case-panel" id="case-2">
       <button class="case-close" type="button" aria-label="Close case study">Close</button>
-        
-          <h3>Building the company's first engineering capacity dashboard myself</h3>
-          <p class="where">Luminai, built with Claude Code, 2026</p>
-        
-        <p class="result">Better allocation decisions across 126+ workflows, ~$60K in annual labor savings.</p>
+        <h3>Clearing a 40,000-task backlog for a health system in three days</h3>
+        <p class="where">Luminai, sole product manager, 2026</p>
+        <p class="result">40K+ backlog cleared in 3 days, $110K+ in annual savings.</p>
         <dl class="steps">
-          <div><dt>Problem</dt><dd>More than 20 engineers across time zones were split across 126+ concurrent workflows, with no single view of who had capacity and where work was piling up.</dd></div>
-          <div><dt>What I did</dt><dd>Designed a capacity-scoring model and built the dashboard tool myself using Claude Code, alongside the company's first workflow registry.</dd></div>
-          <div><dt>Shipped</dt><dd>Used it to run weekly allocation syncs with the global engineering team, turning staffing from guesswork into a shared, data-backed conversation.</dd></div>
+          <div><dt>Spotted</dt><dd>A health system's front-line staff were buried under a growing queue of notifications that each needed manual handling, pulling time away from patient-facing work.</dd></div>
+          <div><dt>Proved</dt><dd>Ran user interviews with the staff doing the work to pin down what they actually needed, then pitched the client's CIO to secure buy-in before building.</dd></div>
+          <div><dt>Automated</dt><dd>Scoped an AI notification-clearing automation around those needs and led it from design through go-live, defining launch KPIs and success criteria up front.</dd></div>
+          <div><dt>Result</dt><dd>The 40,000-task backlog was cleared in three days, saving $110K+ a year. It sat within a portfolio of 17 automations I owned at the account, which held 99% uptime and drove $3.8M in annual impact (6x ROI).</dd></div>
         </dl>
-      </article>
+    </article>
     <article class="case-panel" id="case-3">
       <button class="case-close" type="button" aria-label="Close case study">Close</button>
-        
-          <h3>Making self-service billing rules usable during beta</h3>
-          <p class="where">Candid Health, Strategy &amp; Operations, 2024 to 2025</p>
-        
-        <p class="result">Rules page usage up 15% after research-driven design changes.</p>
+        <h3>Building the company's first engineering capacity dashboard myself</h3>
+        <p class="where">Luminai, built with Claude Code, 2026</p>
+        <p class="result">Better allocation decisions across 126+ workflows, ~$60K in annual labor savings.</p>
         <dl class="steps">
-          <div><dt>Problem</dt><dd>Candid was rolling out a feature that let customers create their own billing rules, but early users were struggling with the rule creation flow.</dd></div>
-          <div><dt>What I did</dt><dd>Led user feedback sessions during the beta, mapped where people got stuck, and translated those findings into specific UI and UX changes with Product Design.</dd></div>
-          <div><dt>Related</dt><dd>Earlier, I unblocked a $300K ACV customer stalled for months by aligning Product and Engineering on a new approach and shipping their billing rule changes myself via GitHub, cutting their support tickets by 90%.</dd></div>
+          <div><dt>Spotted</dt><dd>More than 20 engineers across time zones were split across 126+ concurrent workflows, with no single view of who had capacity and where work was piling up.</dd></div>
+          <div><dt>Proved</dt><dd>Designed a capacity-scoring model to quantify each engineer's bandwidth, alongside the company's first workflow registry.</dd></div>
+          <div><dt>Automated</dt><dd>Built the dashboard tool myself using Claude Code, so capacity updated in one place instead of living in people's heads.</dd></div>
+          <div><dt>Result</dt><dd>Used it to run weekly allocation syncs with the global engineering team, turning staffing from guesswork into a data-backed conversation and saving about $60K a year in labor costs.</dd></div>
         </dl>
-      </article>
+    </article>
   </div>
 </section>
 
 <section id="experience" aria-labelledby="exp-title">
   <div class="row">
-    <div class="label" id="exp-title">Experience</div>
+    <div class="label reveal" id="exp-title">Experience</div>
     <ol class="timeline">
-      <li><div class="yrs">2026 to 2028</div><div><div class="org">Columbia Business School <span>MBA, Product Management</span></div><p class="note">Consortium Fellow. Chief of Staff, Student Government. AI Club and Technology Club.</p></div></li>
-      <li><div class="yrs">2026</div><div><div class="org">Luminai <span>Product Operations / AI Deployment Strategist</span></div><p class="note">Series B AI operations platform backed by General Catalyst and Y Combinator. Owned 17 AI automations at a health system.</p></div></li>
-      <li><div class="yrs">2024 to 2025</div><div><div class="org">Candid Health <span>Strategy &amp; Operations Manager</span></div><p class="note">Series D billing platform. Managed a $1.5M+ ARR portfolio and turned around the company's most at-risk client in under a month.</p></div></li>
-      <li><div class="yrs">2022 to 2023</div><div><div class="org">Truepill <span>Customer Strategy &amp; Growth Manager</span></div><p class="note">API-first digital pharmacy serving 10M+ patients. Redesigned pricing to take a key account from -5% to +9% margin.</p></div></li>
-      <li><div class="yrs">2020 to 2022</div><div><div class="org">ZS Associates <span>Decision Analytics Associate</span></div><p class="note">Market research and forecasting for a Fortune 50 pharmaceutical client.</p></div></li>
-      <li><div class="yrs">2016 to 2020</div><div><div class="org">Rutgers University <span>BS, Industrial Engineering</span></div><p class="note">Summa Cum Laude.</p></div></li>
+      <li class="reveal"><div class="yrs">2026 to 2028</div><div><div class="org">Columbia Business School <span>MBA, Product Management</span></div><p class="note">Consortium Fellow. Chief of Staff, Student Government. AI Club and Technology Club.</p></div></li>
+      <li class="reveal"><div class="yrs">2026</div><div><div class="org">Luminai <span>Product Operations / AI Deployment Strategist</span></div><p class="note">Series B AI operations platform backed by General Catalyst and Y Combinator. Owned 17 AI automations at a health system.</p></div></li>
+      <li class="reveal"><div class="yrs">2024 to 2025</div><div><div class="org">Candid Health <span>Strategy &amp; Operations Manager</span></div><p class="note">Series D billing platform. Managed a $1.5M+ ARR portfolio and turned around the company's most at-risk client in under a month.</p></div></li>
+      <li class="reveal"><div class="yrs">2022 to 2023</div><div><div class="org">Truepill <span>Customer Strategy &amp; Growth Manager</span></div><p class="note">API-first digital pharmacy serving 10M+ patients. Redesigned pricing to take a key account from -5% to +9% margin.</p></div></li>
+      <li class="reveal"><div class="yrs">2020 to 2022</div><div><div class="org">ZS Associates <span>Decision Analytics Associate</span></div><p class="note">Market research and forecasting for a Fortune 50 pharmaceutical client.</p></div></li>
+      <li class="reveal"><div class="yrs">2016 to 2020</div><div><div class="org">Rutgers University <span>BS, Industrial Engineering</span></div><p class="note">Summa Cum Laude.</p></div></li>
     </ol>
   </div>
 </section>
 
 <section id="about" class="about" aria-labelledby="about-title">
   <div class="row">
-    <div class="label" id="about-title">About</div>
+    <div class="label reveal" id="about-title">About</div>
     <div>
-      <p>I'm an industrial engineer by training, which mostly means I can't look at a broken process without wanting to fix it. My career has been a series of those: forecasting at ZS, pricing and compliance calls at Truepill, billing data at Candid, and finally AI automations at Luminai, where I got to own the whole thing from user interview to launch.</p>
-      <p>Outside of work I train on gymnastic rings, have baked 50+ loaves of sourdough, keep a running ranking of NYC pizza, and have traveled to 20+ countries. I also fish, play tennis, and speak Marathi and Hindi.</p>
+      <p class="reveal">I'm an industrial engineer by training, which mostly means I can't look at a broken process without wanting to fix it. My career has been a series of those: forecasting at ZS, pricing and compliance calls at Truepill, billing data at Candid, and finally AI automations at Luminai, where I got to own the whole thing from user interview to launch.</p>
+      <p class="reveal">Outside of work I train on gymnastic rings, have baked 50+ loaves of sourdough, keep a running ranking of NYC pizza, and have traveled to 20+ countries. I also fish, play tennis, and speak Marathi and Hindi.</p>
     </div>
   </div>
 </section>
 
 <section id="play-section" class="game-section" aria-labelledby="play-title">
   <div class="row">
-    <div class="label" id="play-title">Play my career</div>
+    <div class="label reveal" id="play-title">Play my career</div>
     <div>
-      <p style="margin:0 0 16px;max-width:62ch">The same story, as a two-minute game. Start on Rutgers' College Avenue campus, ride the train and fly cross-country, and meet the people I built for at each stop.</p>
-<div class="frame" id="frame">
+      <p class="reveal" style="margin:0 0 16px;max-width:62ch">The same story, as a two-minute game. Start on Rutgers' College Avenue campus, ride the train and fly cross-country, and meet the people I built for at each stop.</p>
+<div class="frame reveal" id="frame">
     <div class="hud">
       <span id="place">Rutgers</span>
       <div class="slots" aria-label="Collected items">
@@ -466,9 +470,9 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
   </div>
 </section>
 
-<footer>
+<footer class="reveal">
   <div class="row">
-    <div class="label">Contact</div>
+    <div class="label reveal">Contact</div>
     <div>
       <p><a href="mailto:amalavade28@gsb.columbia.edu">amalavade28@gsb.columbia.edu</a></p>
       <p><a href="https://www.linkedin.com/in/akshaymalavade/" target="_blank" rel="noopener">linkedin.com/in/akshaymalavade</a></p>
@@ -1076,6 +1080,18 @@ requestAnimationFrame(loop);
     const card = cards.find(c => c.getAttribute('aria-controls') === p.id);
     closeAll(); card.focus();
   }));
+})();
+</script>
+<script>
+(function () {
+  if (!document.documentElement.classList.contains('js-reveal')) return;
+  // stagger items that appear together
+  [document.querySelectorAll('.cs-card'), document.querySelectorAll('.timeline .reveal'), document.querySelectorAll('.about .reveal')]
+    .forEach(group => group.forEach((el, i) => el.style.setProperty('--d', (i * 110) + 'ms')));
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 })();
 </script>
 </body>
