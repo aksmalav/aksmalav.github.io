@@ -96,6 +96,25 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
 .choice.sel::before { content: "▶ "; color: #1F5C4E; }
 @media (max-width: 600px) { .card .panel { padding: 14px 16px; } .card .sum { font-size: 14px; } }
 </style>
+<style>
+.custom { gap: 12px; }
+.custom h2 { font-family: "Silkscreen", monospace; font-weight: 400; font-size: clamp(18px, 3.4vw, 26px); margin: 0; }
+.cwrap { display: flex; gap: 22px; align-items: center; justify-content: center; flex-wrap: wrap; }
+#preview { width: 132px; height: 132px; image-rendering: pixelated; background: #CFE3D2; border-radius: 12px; }
+.opt { display: grid; grid-template-columns: 96px 1fr; gap: 8px; align-items: center; margin: 6px 0; text-align: left; }
+.olabel { font-family: "Silkscreen", monospace; font-size: 11px; color: #BFE3D6; }
+.sw { display: flex; gap: 7px; flex-wrap: wrap; }
+.swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #3A444E; cursor: pointer; padding: 0; }
+.swatch[aria-pressed="true"] { border-color: #F2C14E; box-shadow: 0 0 0 2px #F2C14E; }
+.tbtn { font: inherit; font-size: 13px; padding: 4px 12px; border-radius: 6px; border: 2px solid #3A444E; background: transparent; color: #F3F5F6; cursor: pointer; }
+.tbtn[aria-pressed="true"] { border-color: #F2C14E; background: #2F4A43; }
+.swatch:focus-visible, .tbtn:focus-visible { outline: 3px solid #F2C14E; outline-offset: 2px; }
+@media (max-width: 600px) { .customizing canvas#game, .customizing .hud { display: none; } .customizing .custom { position: static; border-radius: 6px; padding: 18px 12px; } #preview { width: 88px; height: 88px; } .opt { grid-template-columns: 78px 1fr; } .swatch { width: 22px; height: 22px; } }
+.embedded body { background: transparent; }
+.embedded .top, .embedded .hud a { display: none; }
+.embedded .page { padding: 0; max-width: none; }
+</style>
+<script>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
 </head>
 <body>
 <div class="page">
@@ -151,7 +170,16 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
         <a class="btn li" href="#" target="_blank" rel="noopener">Connect on LinkedIn</a>
         <button class="btn alt" id="play">Play the game</button>
       </div>
-      <p class="small">Or <a href="https://aksmalav.github.io/" target="_blank" rel="noopener">view my portfolio</a> or <a href="mailto:am7053@gsb.columbia.edu">email me</a></p>
+      <p class="small">Or <a href="https://aksmalav.github.io/" target="_blank" rel="noopener">view my portfolio</a> or <a href="mailto:amalavade28@gsb.columbia.edu">email me</a></p>
+    </div>
+
+    <div class="overlay custom" id="custom" hidden>
+      <h2>Make your character</h2>
+      <div class="cwrap">
+        <canvas id="preview" width="96" height="96" aria-label="Character preview"></canvas>
+        <div id="opts"></div>
+      </div>
+      <button class="btn" id="start">Start at Rutgers</button>
     </div>
 
     <div class="overlay" id="ending" hidden>
@@ -159,7 +187,7 @@ canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; 
       <p class="sub">Engineering roots, healthcare analytics, and three startups spent shipping products that fix real operational problems. The next chapter is a product management internship for summer 2027. Maybe on your team?</p>
       <div class="btns">
         <a class="btn li" href="#" target="_blank" rel="noopener">Connect on LinkedIn</a>
-        <a class="btn alt" href="mailto:am7053@gsb.columbia.edu">Email Akshay</a>
+        <a class="btn alt" href="mailto:amalavade28@gsb.columbia.edu">Email Akshay</a>
       </div>
       <p class="small"><a href="https://aksmalav.github.io/" target="_blank" rel="noopener">View portfolio</a></p>
       <button class="linkbtn" id="keep">Keep exploring</button>
@@ -245,9 +273,9 @@ const CH = {
     card: { where: 'Chapter 5', title: 'Luminai', role: 'Product Operations / AI Deployment Strategist', meta: '2026.', sum: 'A Series B AI operations platform backed by General Catalyst and Y Combinator.' },
     npc: { name: 'Front-line staffer', lines: [
       { who: 'Front-line staffer', t: "This notification queue never ends. We'd rather be spending our time with patients." },
-      { who: 'Akshay', t: "I interviewed the team, won buy-in from the health system's CIO, and led two AI automations from design to go-live as the sole PM." },
+      { who: 'Akshay', t: "I interviewed the team, won buy-in from the health system's CIO, and led an AI notification-clearing automation from design to go-live as the sole PM." },
       { who: 'Akshay', t: 'The 40,000-task backlog was cleared in 3 days. Across the 17 automations I owned: 99% uptime and $3.8M in annual impact.' },
-      { who: 'Akshay', t: "I also built the company's first engineering capacity dashboard with Claude Code, saving about $60K a year in labor costs." }
+      { who: 'Akshay', t: 'I also fixed a patient workflow stuck at 40% completion. I traced the root cause and rebuilt it with a direct API integration: 500% more output.' }
     ] },
     icon: '🤖', item: 'AI helper bot',
     recap: 'Luminai, where I owned AI products end to end, from user interviews to launch.'
@@ -263,7 +291,7 @@ const CH = {
   },
   home: {
     short: 'hometown', place: 'Hometown, Central Jersey', region: 'NJ', travelName: 'Central Jersey',
-    card: { where: 'Home base', title: 'Hometown', role: 'Central Jersey', meta: 'Born and raised in New Jersey.', sum: 'Grab a slice at the pizza and bakery shop, or hit the rings in the park, then head back out on the journey.' },
+    card: { where: 'Home base', title: 'Hometown', role: 'Central Jersey', meta: 'Born and raised in New Jersey.', sum: 'Bake some bread at the pizza and bakery shop or hit the rings in the park. The train can take you back to Columbia whenever you like.' },
     npc: { name: 'Neighbor', flavor: true, lines: [
       { who: 'Neighbor', t: "Welcome home, Akshay! The oven's fired up at the pizza place, and the rings are out in the park." }
     ] }
@@ -298,43 +326,54 @@ function makeGrid(B, opts = {}) {
 const TRAIN = () => ({ x: 2, y: 9, w: 6, h: 2, vehicle: 'train', label: ['Trains'], act: 'train' });
 const PLANE = (x = 13) => ({ x, y: 8, w: 5, h: 3, vehicle: 'plane', label: ['Flights'], act: 'plane' });
 
+// Where each stop's train or plane can take you
+const ROUTES = {
+  rutgers:  { veh: 'train', to: [{ to: 'zs', label: 'Next stop: ZS in New York City' }] },
+  zs:       { veh: 'plane', to: [{ to: 'truepill', label: 'Fly to Truepill in Hayward, California' }] },
+  truepill: { veh: 'plane', to: [{ to: 'candid', label: 'Fly back to New York for Candid Health' }] },
+  candid:   { veh: 'plane', to: [{ to: 'luminai', label: 'Fly to California for Luminai' }] },
+  luminai:  { veh: 'plane', to: [{ to: 'columbia', label: 'Fly to New York for Columbia in Manhattanville' }] },
+  columbia: { veh: 'train', to: [{ to: 'home', label: 'Take the train home to Central Jersey' }] },
+  home:     { veh: 'train', to: [{ to: 'columbia', label: 'Back to Columbia in Manhattanville' }, { to: 'rutgers', label: 'Replay from Rutgers' }] }
+};
+
 const SCENES = {
   rutgers: {
     theme: 'campus', spawn: [9, 7],
-    grid: makeGrid('T', { fill: [[0, 12, 19, 13, '~']], tiles: [[3, 2, 'T'], [5, 4, 'T'], [8, 2, 'T'], [11, 2, 'T'], [8, 4, 'T'], [11, 4, 'T'], [14, 2, 'T'], [16, 4, 'T'], [2, 4, 'f'], [6, 2, 'f'], [9, 1, 'f'], [13, 4, 'f'], [17, 2, 'f']] }),
-    buildings: [TRAIN(), PLANE()],
+    grid: makeGrid('T', { fill: [[0, 12, 19, 13, '~']], tiles: [[3, 2, 'T'], [5, 4, 'T'], [8, 2, 'T'], [11, 2, 'T'], [8, 4, 'T'], [11, 4, 'T'], [14, 2, 'T'], [16, 4, 'T'], [2, 4, 'f'], [6, 2, 'f'], [9, 1, 'f'], [13, 4, 'f'], [17, 2, 'f'], [14, 9, 'T'], [16, 8, 'f'], [17, 10, 'T']] }),
+    buildings: [TRAIN()],
     objects: [{ x: 10, y: 3, kind: 'sign', act: 'say:Rutgers University, College Avenue campus. The Raritan River runs right alongside.' }],
-    npc: { x: 7, y: 7, shirt: '#A4232F' }
+    npc: { x: 7, y: 7, shirt: '#A4232F', skin: '#E0A97E' }
   },
   zs: {
     theme: 'nyc', spawn: [15, 11],
     grid: makeGrid('X', { fill: [[1, 1, 4, 4, 'X'], [15, 1, 18, 4, 'X']] }),
     buildings: [
       { x: 6, y: 1, w: 8, h: 5, label: ['ZS Associates'], roof: '#2B3A55', wall: '#D6DBE3', act: "say:ZS's New York office, home to two years of forecasting models and client workshops." },
-      TRAIN(), PLANE()
-    ],
-    objects: [{ x: 4, y: 8, kind: 'cart', act: 'say:A classic New York slice. Akshay is still refining his definitive NYC pizza ranking.' }],
-    npc: { x: 12, y: 7, shirt: '#3B6EA5' }
-  },
-  truepill: {
-    theme: 'ca', spawn: [15, 11],
-    grid: makeGrid('P', { fill: [[0, 12, 19, 13, '~']], tiles: [[2, 2, 'P'], [4, 4, 'P'], [16, 2, 'P'], [17, 4, 'P']] }),
-    buildings: [
-      { x: 6, y: 1, w: 8, h: 5, label: ['Truepill', 'Hayward, CA'], roof: '#D4622F', wall: '#F7ECDC', act: 'say:Truepill HQ. Pharmacy infrastructure for digital health companies.' },
       PLANE()
     ],
-    objects: [{ x: 4, y: 8, kind: 'sign', act: 'say:Welcome to Hayward, California, on the east side of the Bay.' }],
-    npc: { x: 12, y: 7, shirt: '#0F766E' }
+    objects: [{ x: 4, y: 8, kind: 'cart', act: 'say:A classic New York slice. Akshay is still refining his definitive NYC pizza ranking.' }],
+    npc: { x: 12, y: 7, shirt: '#3B6EA5', skin: '#F1C7A5' }
+  },
+  truepill: {
+    theme: 'ca', spawn: [15, 11], backdrop: 'bay',
+    grid: makeGrid('P', { fill: [[1, 1, 18, 1, 'H'], [1, 2, 18, 2, '~']], tiles: [[2, 4, 'P'], [4, 3, 'P'], [16, 4, 'P'], [17, 3, 'P']] }),
+    buildings: [
+      { x: 6, y: 3, w: 8, h: 3, label: ['Truepill', 'Hayward, CA'], roof: '#D4622F', wall: '#F7ECDC', act: 'say:Truepill HQ in Hayward, with the San Francisco Bay just behind it.' },
+      PLANE()
+    ],
+    objects: [{ x: 4, y: 8, kind: 'sign', act: 'say:Welcome to Hayward, California, on the east shore of the Bay.' }],
+    npc: { x: 12, y: 7, shirt: '#0F766E', skin: '#C68A5C', style: 'long' }
   },
   candid: {
     theme: 'nyc', spawn: [14, 11],
     grid: makeGrid('X', { fill: [[1, 1, 4, 4, 'X'], [17, 1, 18, 12, '~']] }),
     buildings: [
       { x: 6, y: 1, w: 8, h: 5, label: ['Candid Health'], roof: '#6A4C93', wall: '#ECE7F3', act: 'say:Candid Health, where medical billing meets software.' },
-      TRAIN(), PLANE(12)
+      PLANE(12)
     ],
     objects: [{ x: 4, y: 8, kind: 'cart', act: 'say:Another pizza cart. The NYC pizza ranking research continues.' }],
-    npc: { x: 11, y: 7, shirt: '#B45309' }
+    npc: { x: 11, y: 7, shirt: '#B45309', skin: '#7A5236' }
   },
   luminai: {
     theme: 'ca', spawn: [15, 11],
@@ -344,31 +383,32 @@ const SCENES = {
       PLANE()
     ],
     objects: [{ x: 4, y: 8, kind: 'sign', act: 'say:Welcome to the startup coast.' }],
-    npc: { x: 12, y: 7, shirt: '#BE185D' }
+    npc: { x: 12, y: 7, shirt: '#BE185D', skin: '#A8754F', style: 'long' }
   },
   columbia: {
-    theme: 'nyc', spawn: [14, 11],
-    grid: makeGrid('X', { fill: [[1, 1, 4, 4, 'X'], [17, 1, 18, 12, '~']] }),
+    theme: 'nyc', spawn: [12, 11],
+    grid: makeGrid('X', { fill: [[17, 1, 18, 12, '~'], [1, 12, 16, 12, 'V']] }),
     buildings: [
-      { x: 6, y: 1, w: 8, h: 5, label: ['Columbia Business School', 'Manhattanville'], roof: '#4A7FB5', wall: '#E8EEF5', act: "say:Columbia Business School's home in Manhattanville, right by the Hudson." },
-      TRAIN(), PLANE(12)
+      { x: 1, y: 1, w: 4, h: 4, glass: true, label: ['Geffen', 'Hall'], act: "say:David Geffen Hall, one of Columbia Business School's two buildings on the Manhattanville campus." },
+      { x: 7, y: 1, w: 9, h: 5, glass: true, label: ['Columbia Business School', 'Kravis Hall'], act: "say:Henry R. Kravis Hall, Columbia Business School's home in Manhattanville, a few blocks from the Hudson." },
+      TRAIN()
     ],
-    objects: [],
-    npc: { x: 11, y: 7, shirt: '#475569' }
+    objects: [{ x: 13, y: 8, kind: 'sign', act: 'say:Welcome to Manhattanville, Columbia\'s newest campus. The elevated subway runs along the south edge, and the Hudson is just to the west.' }],
+    npc: { x: 11, y: 7, shirt: '#475569', skin: '#4E3424' }
   },
   home: {
     theme: 'home', spawn: [15, 11],
-    grid: makeGrid('T', { tiles: [[7, 2, 'T'], [11, 2, 'T'], [8, 5, 'f'], [10, 5, 'f'], [7, 4, 'f'], [2, 12, 'f'], [12, 12, 'f']] }),
+    grid: makeGrid('T', { tiles: [[7, 2, 'T'], [11, 2, 'T'], [8, 5, 'f'], [10, 5, 'f'], [7, 4, 'f'], [2, 12, 'f'], [12, 12, 'f'], [14, 9, 'T'], [16, 8, 'f']] }),
     buildings: [
       { x: 2, y: 2, w: 4, h: 4, label: ['Home'], roof: '#B5533C', wall: '#F1E3C8', act: 'say:Home in Central Jersey. Always good to be back.' },
       { x: 13, y: 2, w: 5, h: 4, label: ['Pizza & Bakery'], roof: '#2F6B3A', wall: '#F4E9D4', act: 'pizza' },
-      TRAIN(), PLANE()
+      TRAIN()
     ],
     objects: [
       { x: 9, y: 3, kind: 'rings', act: 'rings' },
       { x: 4, y: 8, kind: 'sign', act: 'say:Welcome to Central Jersey. Hometown of one future product manager.' }
     ],
-    npc: { x: 7, y: 7, shirt: '#D98A2B' }
+    npc: { x: 7, y: 7, shirt: '#D98A2B', skin: '#C68A5C' }
   }
 };
 
@@ -462,7 +502,7 @@ function talkNpc() {
   items.add(scene); updateHud();
   say([...c.npc.lines,
     { who: '', t: `You got the ${c.icon} ${c.item}! (${items.size} of 5)` },
-    { who: '', t: 'When you are ready, take the train or plane to move on.' }]);
+    { who: '', t: `When you're ready, hop on the ${ROUTES[scene].veh} to your next stop.` }]);
 }
 function getBonus(id, lines, label) {
   const first = !bonus.has(id);
@@ -470,7 +510,7 @@ function getBonus(id, lines, label) {
   say(first ? [...lines, { who: '', t: `Bonus: ${label}` }] : lines);
 }
 function travel(dest) {
-  const flying = modeFor(scene, dest) === 'plane';
+  const flying = ROUTES[scene].veh === 'plane';
   fading = true;
   $('fadeText').innerHTML = `<span class="ride">${flying ? '✈️' : '🚆'}</span><br>${flying ? 'Flying' : 'Taking the train'} to ${CH[dest].travelName}...`;
   $('fade').classList.add('on');
@@ -482,37 +522,18 @@ function travel(dest) {
     }, 450);
   }, 950);
 }
-function modeFor(a, b) { return (CH[a].region === 'CA' || CH[b].region === 'CA') ? 'plane' : 'train'; }
-function destinations() {
-  const d = [];
-  if (scene === 'home') {
-    if (furthest < SEQ.length - 1) d.push({ to: SEQ[furthest + 1], label: `Continue the journey: ${CH[SEQ[furthest + 1]].short}` });
-    d.push({ to: SEQ[furthest], label: `Go back to ${CH[SEQ[furthest]].short}` });
-  } else {
-    const i = SEQ.indexOf(scene);
-    if (i < SEQ.length - 1) d.push({ to: SEQ[i + 1], label: `Next stop: ${CH[SEQ[i + 1]].short}`, next: true });
-    else d.push({ to: 'rutgers', label: 'Start over at Rutgers' });
-    d.push({ to: 'home', label: 'Back to hometown' });
-  }
-  return d;
-}
-function depart(mode) {
-  const all = destinations();
-  const mine = all.filter(d => modeFor(scene, d.to) === mode);
-  const who = mode === 'plane' ? 'Gate agent' : 'Conductor';
-  if (!mine.length) {
-    const other = all[0];
-    return say([{ who, t: `No ${mode === 'plane' ? 'flights' : 'trains'} to where you are headed. ${other.label.replace(/^[^:]+: /, '')} is a ${mode === 'plane' ? 'train' : 'flight'} away.` }]);
-  }
-  const opts = mine.map(d => ({ label: d.label, fn: () => travel(d.to) }));
+function depart() {
+  const r = ROUTES[scene];
+  const who = r.veh === 'plane' ? 'Gate agent' : 'Conductor';
+  const opts = r.to.map(d => ({ label: d.label, fn: () => travel(d.to) }));
   opts.push({ label: 'Stay a little longer', fn: null });
-  say([{ who, t: mode === 'plane' ? 'Now boarding. Where are you flying?' : 'All aboard! Where to?', choices: opts }]);
+  say([{ who, t: r.veh === 'plane' ? 'Now boarding. Where are you flying?' : 'All aboard! Where to?', choices: opts }]);
 }
 function showEnding() { playing = false; $('ending').hidden = false; $('ending').querySelector('.btn').focus(); }
 
 function runAct(act) {
   if (act.startsWith('say:')) return say([{ who: '', t: act.slice(4) }]);
-  if (act === 'train' || act === 'plane') return depart(act);
+  if (act === 'train' || act === 'plane') return depart();
   if (act === 'pizza') return getBonus('pizza', [
     { who: 'Pizza & Bakery', t: 'The wood-fired oven is roaring.' },
     { who: 'Akshay', t: 'Stretch the dough, ladle the sauce, tear the mozzarella, and slide it in. A minute or two later: a blistered, leopard-spotted crust.' },
@@ -580,8 +601,46 @@ document.querySelectorAll('.ctrl[data-dir]').forEach(b => {
 });
 $('abtn').addEventListener('pointerdown', e => { e.preventDefault(); action(); });
 
+const LOOK = { skin: '#A8754F', style: 'short', shirt: '#1F5C4E', pants: '#2B3440', shoes: '#1D1A18', hair: '#1D1A18' };
+const OPTIONS = [
+  { key: 'skin', label: 'Skin tone', values: ['#F1C7A5', '#E0A97E', '#C68A5C', '#A8754F', '#7A5236', '#4E3424'] },
+  { key: 'style', label: 'Character', text: [['short', 'Man'], ['long', 'Woman']] },
+  { key: 'shirt', label: 'Shirt', values: ['#1F5C4E', '#3D6FA8', '#B5533C', '#6A4C93', '#E7C64A', '#F3F5F6', '#18202B'] },
+  { key: 'pants', label: 'Pants', values: ['#2B3440', '#3B4F7A', '#7A6A55', '#1D1A18', '#9AA3AD'] },
+  { key: 'shoes', label: 'Shoes', values: ['#1D1A18', '#F3F5F6', '#8A5A3B', '#B5533C', '#3D6FA8'] }
+];
+let customOpen = false;
+function buildOptions() {
+  const host = $('opts'); host.innerHTML = '';
+  OPTIONS.forEach(o => {
+    const row = document.createElement('div'); row.className = 'opt';
+    row.innerHTML = `<span class="olabel">${o.label}</span>`;
+    const sw = document.createElement('div'); sw.className = 'sw'; sw.setAttribute('role', 'group'); sw.setAttribute('aria-label', o.label);
+    (o.text || o.values.map(v => [v, ''])).forEach(([val, txt], i) => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.className = o.text ? 'tbtn' : 'swatch';
+      if (o.text) b.textContent = txt; else { b.style.background = val; b.setAttribute('aria-label', `${o.label} option ${i + 1}`); }
+      b.setAttribute('aria-pressed', String(LOOK[o.key] === val));
+      b.addEventListener('click', () => { LOOK[o.key] = val; [...sw.children].forEach(c => c.setAttribute('aria-pressed', String(c === b))); });
+      sw.appendChild(b);
+    });
+    row.appendChild(sw); host.appendChild(row);
+  });
+}
+const pctx = $('preview').getContext('2d');
+function drawPreview(now) {
+  const faces = ['down', 'right', 'up', 'left'];
+  pctx.setTransform(1, 0, 0, 1, 0, 0); pctx.clearRect(0, 0, 96, 96);
+  pctx.setTransform(3, 0, 0, 3, 0, 0);
+  G = pctx; drawPerson(0, -1, LOOK, faces[Math.floor(now / 900) % 4], Math.floor(now / 220) % 2 + 1); G = ctx;
+}
 $('play').addEventListener('click', () => {
-  $('title').hidden = true; playing = true; $('play').blur();
+  $('title').hidden = true; $('play').blur();
+  buildOptions(); customOpen = true; $('custom').hidden = false; $('frame').classList.add('customizing');
+  $('custom').querySelector('button').focus();
+});
+$('start').addEventListener('click', () => {
+  customOpen = false; $('custom').hidden = true; $('frame').classList.remove('customizing'); playing = true; $('start').blur();
   visited.add('rutgers');
   const touch = matchMedia('(hover: none)').matches;
   showCard('rutgers', () => say([
@@ -593,7 +652,8 @@ $('keep').addEventListener('click', () => { $('ending').hidden = true; playing =
 
 /* ---------- Drawing ---------- */
 const hash = (x, y) => (x * 73 + y * 37) % 7;
-function R(c, x, y, w, h) { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+let G = ctx;
+function R(c, x, y, w, h) { G.fillStyle = c; G.fillRect(x, y, w, h); }
 
 function drawTile(ch, x, y, s) {
   const th = THEMES[s.theme], X = x * T, Y = y * T, h = hash(x, y), g = s.grid;
@@ -608,6 +668,19 @@ function drawTile(ch, x, y, s) {
     } else if (s.theme === 'campus') {
       R(th.pathDot, X, Y + 15, T, 1); R(th.pathDot, X + (y % 2 ? 8 : 24), Y, 1, 15); R(th.pathDot, X + (y % 2 ? 24 : 8), Y + 16, 1, 16);
     } else if (h === 3) R(th.pathDot, X + 9, Y + 18, 4, 3);
+    return;
+  }
+  if (ch === 'H') {
+    R('#CFE6F1', X, Y, T, T);
+    G.fillStyle = '#9BB37A'; G.beginPath(); G.ellipse(X + 16 + (x % 2) * 6, Y + T + 6, 26, 22 - (x % 3) * 4, 0, Math.PI, 0); G.fill();
+    return;
+  }
+  if (ch === 'V') {
+    R(th.ground, X, Y, T, T);
+    R('#5B6470', X, Y + 6, T, 6); R('#3A444E', X, Y + 12, T, 2);
+    R('#5B6470', X + 2, Y + 14, 4, 18); R('#5B6470', X + 26, Y + 14, 4, 18);
+    G.strokeStyle = '#5B6470'; G.lineWidth = 3; G.beginPath(); G.arc(X + 16, Y + 30, 12, Math.PI, 0); G.stroke();
+    if (x >= 3 && x <= 6) { R('#C9CED6', X, Y - 4, T, 10); R('#2B3A55', X + 6, Y - 2, 8, 4); R('#2B3A55', X + 18, Y - 2, 8, 4); }
     return;
   }
   if (ch === 'X') {
@@ -664,14 +737,12 @@ function drawVehicle(b, now) {
   const pw = ctx.measureText(b.label[0]).width + 14, px = X + 6, py = Y - 4;
   R('#18202B', px - 2, py - 2, pw + 4, 22); R('#FFFDF8', px, py, pw, 18);
   ctx.fillStyle = '#18202B'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(b.label[0], px + 7, py + 3);
-  if (talked.has(scene) || scene === 'home') {
-    const goesNext = destinations().some(d => (d.next || scene === 'home') && modeFor(scene, d.to) === b.vehicle);
-    if (goesNext) marker(X + W - 14, Y + 4, '→', now);
-  }
+  if (talked.has(scene) || scene === 'home') marker(X + W - 14, Y + 4, '→', now);
 }
 
 function drawBuilding(b, now) {
   if (b.vehicle) return drawVehicle(b, now);
+  if (b.glass) return drawGlass(b);
   const X = b.x * T, Y = b.y * T, W = b.w * T, H = b.h * T;
   const roofH = Math.round(H * 0.42);
   R('rgba(0,0,0,.16)', X + 5, Y + 6, W, H);
@@ -695,6 +766,24 @@ function drawBuilding(b, now) {
   b.label.forEach((l, i) => ctx.fillText(l, X + W / 2, py + 4 + i * 14));
 }
 
+function drawGlass(b) {
+  const X = b.x * T, Y = b.y * T, W = b.w * T, H = b.h * T;
+  R('rgba(0,0,0,.16)', X + 5, Y + 6, W, H);
+  R('#7FA7C6', X, Y, W, H);
+  for (let i = 8; i < W; i += 16) R('#6A93B3', X + i, Y + 8, 2, H - 8);
+  for (let j = 18; j < H - 8; j += 14) R('#9CC0DB', X, Y + j, W, 2);
+  R('rgba(255,255,255,.18)', X + 6, Y + 10, W * 0.35, 4);
+  R('#2B3A55', X - 3, Y, W + 6, 8);
+  const dx = X + Math.floor(b.w / 2) * T, dy = Y + H - T;
+  R('#2B3A55', dx + 6, dy + 4, 20, 28); R('#B9D6EA', dx + 8, dy + 6, 7, 26); R('#B9D6EA', dx + 17, dy + 6, 7, 26);
+  ctx.font = '600 12px "Schibsted Grotesk", Arial, sans-serif';
+  const pw = Math.min(W - 6, Math.max(...b.label.map(l => ctx.measureText(l).width)) + 14), ph = b.label.length * 14 + 6;
+  const px = X + W / 2 - pw / 2, py = Y + 14;
+  R('#18202B', px - 2, py - 2, pw + 4, ph + 4); R('#FFFDF8', px, py, pw, ph);
+  ctx.fillStyle = '#18202B'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  b.label.forEach((l, i) => ctx.fillText(l, X + W / 2, py + 4 + i * 14));
+}
+
 function drawObject(o) {
   const X = o.x * T, Y = o.y * T;
   if (o.kind === 'sign') {
@@ -713,26 +802,47 @@ function drawObject(o) {
   }
 }
 
-function drawPerson(x, y, shirt, face, step) {
-  R('rgba(0,0,0,.2)', x + 8, y + 28, 16, 3);
-  R('#2B3440', x + 11, y + 22, 4, step === 1 ? 5 : 7); R('#2B3440', x + 17, y + 22, 4, step === 2 ? 5 : 7);
-  R(shirt, x + 9, y + 13, 14, 10); R('rgba(0,0,0,.15)', x + 9, y + 20, 14, 3);
-  R('#A8754F', x + 10, y + 3, 12, 11); R('#1D1A18', x + 10, y + 1, 12, 4);
-  if (face === 'up') R('#1D1A18', x + 10, y + 1, 12, 10);
-  else if (face === 'left') { R('#1D1A18', x + 17, y + 1, 5, 9); R('#1D1A18', x + 12, y + 8, 2, 2); }
-  else if (face === 'right') { R('#1D1A18', x + 10, y + 1, 5, 9); R('#1D1A18', x + 18, y + 8, 2, 2); }
-  else { R('#1D1A18', x + 13, y + 8, 2, 2); R('#1D1A18', x + 18, y + 8, 2, 2); }
+const NPC_LOOK = { hair: '#1D1A18', pants: '#2B3440', shoes: '#1D1A18', style: 'short' };
+function drawPerson(x, y, L, face, step) {
+  const hair = L.hair || '#1D1A18', long = L.style === 'long';
+  R('rgba(0,0,0,.2)', x + 8, y + 29, 16, 3);
+  const l1 = step === 1 ? 4 : 6, l2 = step === 2 ? 4 : 6;
+  R(L.pants, x + 11, y + 22, 4, l1); R(L.pants, x + 17, y + 22, 4, l2);
+  R(L.shoes, x + 10, y + 22 + l1, 6, 2); R(L.shoes, x + 16, y + 22 + l2, 6, 2);
+  if (long && face !== 'up') R(hair, x + 8, y + 2, 16, 15);
+  R(L.shirt, x + 9, y + 13, 14, 10); R('rgba(0,0,0,.15)', x + 9, y + 20, 14, 3);
+  R(L.skin, x + 10, y + 3, 12, 11); R(hair, x + 10, y + 1, 12, 4);
+  if (face === 'up') { R(hair, x + 10, y + 1, 12, 10); if (long) R(hair, x + 10, y + 11, 12, 6); }
+  else if (face === 'left') { R(hair, x + 17, y + 1, 5, 9); R('#1D1A18', x + 12, y + 8, 2, 2); }
+  else if (face === 'right') { R(hair, x + 10, y + 1, 5, 9); R('#1D1A18', x + 18, y + 8, 2, 2); }
+  else {
+    R('#1D1A18', x + 13, y + 8, 2, 2); R('#1D1A18', x + 18, y + 8, 2, 2);
+    if (long) { R(hair, x + 10, y + 3, 2, 9); R(hair, x + 20, y + 3, 2, 9); }
+  }
+}
+
+function drawBackdrop(s) {
+  if (s.backdrop !== 'bay') return;
+  // a generic suspension bridge across the bay
+  const y = 2 * T + 12;
+  G.strokeStyle = '#7C8A99'; G.lineWidth = 2;
+  [[2, 8], [10, 16]].forEach(([a, b]) => {
+    G.beginPath(); G.moveTo(a * T, y - 18); G.quadraticCurveTo(((a + b) / 2) * T, y + 4, b * T, y - 18); G.stroke();
+  });
+  R('#5F6B78', 1 * T, y, 18 * T, 4);
+  [2, 8, 10, 16].forEach(t => R('#5F6B78', t * T - 2, y - 22, 4, 30));
 }
 
 function draw(now) {
   const s = SCENES[scene];
   for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) drawTile(s.grid[y][x], x, y, s);
+  drawBackdrop(s);
   s.objects.forEach(drawObject);
   s.buildings.forEach(b => drawBuilding(b, now));
-  drawPerson(s.npc.x * T, s.npc.y * T, s.npc.shirt, 'down', 0);
+  drawPerson(s.npc.x * T, s.npc.y * T, { ...NPC_LOOK, skin: s.npc.skin || '#A8754F', shirt: s.npc.shirt, style: s.npc.style || 'short' }, 'down', 0);
   if (!talked.has(scene)) marker(s.npc.x * T + 16, s.npc.y * T - 10, CH[scene].npc.flavor ? '…' : '!', now);
   const step = mv ? (Math.floor(mv.t / 75) % 2) + 1 : 0;
-  drawPerson(P.x, P.y, '#1F5C4E', P.face, step);
+  drawPerson(P.x, P.y, LOOK, P.face, step);
 }
 
 /* ---------- Loop ---------- */
@@ -747,6 +857,7 @@ function loop(now) {
   }
   if (!mv && !dlg && !cardOpen && playing && !fading && held.length && now > cooldown) attempt(held[held.length - 1]);
   draw(now);
+  if (customOpen) drawPreview(now);
   requestAnimationFrame(loop);
 }
 loadScene('rutgers');
